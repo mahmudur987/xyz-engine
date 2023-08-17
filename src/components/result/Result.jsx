@@ -1,7 +1,8 @@
 import { useContext } from "react";
 import Header from "../Header/Header";
 import { stateContext } from "../context/projectContext";
-
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 const Result = () => {
   const { project } = useContext(stateContext);
   const {
@@ -16,6 +17,18 @@ const Result = () => {
     min_Y,
     min_Z,
   } = project || {};
+
+  const printDocument = () => {
+    const input = document.getElementById("divToPrint");
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, "JPEG", 0, 0);
+      // pdf.output('dataurlnewwindow');
+      pdf.save("download.pdf");
+    });
+  };
+
   return (
     <>
       <Header />
@@ -28,8 +41,8 @@ const Result = () => {
           </div>
         )}
         {project && (
-          <div className="flex justify-center items-center min-h-[400px]">
-            <div className="overflow-x-auto">
+          <div className="flex flex-col gap-5 justify-center items-center min-h-[400px]">
+            <div id="divToPrint" className="overflow-x-auto p-3">
               <table className="table">
                 {/* head */}
                 <thead>
@@ -62,6 +75,13 @@ const Result = () => {
                   </tr>
                 </tbody>
               </table>
+            </div>
+
+            {/* print */}
+            <div className="flex justify-end w-full">
+              <button className="btn btn-outline my-6" onClick={printDocument}>
+                Print Result As Pdf
+              </button>
             </div>
           </div>
         )}
