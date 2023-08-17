@@ -4,6 +4,7 @@ import Header from "../Header/Header";
 import { stateContext } from "../context/projectContext";
 import { findMaxNumber, findMinNumber } from "../FindMaxAndMin";
 import Charts from "./Charts";
+import { toast } from "react-hot-toast";
 const AddProjects = () => {
   const { setProject } = useContext(stateContext);
 
@@ -70,7 +71,7 @@ const AddProjects = () => {
       min_Z,
     };
     setProject(newProject);
-    console.log(newProject);
+    toast.success("please go to result to print the summary");
   };
 
   return (
